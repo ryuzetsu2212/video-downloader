@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>GrabVideo — TikTok · Instagram · YouTube</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090f; --card:#10141f; --card2:#161b29; --line:#232a3d;
+  --txt:#eef1f8; --mut:#8b93a7; --acc:#6d5cff; --acc2:#00d4ff;
+  --ok:#3ddc97; --err:#ff6b81;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:
+  radial-gradient(1200px 600px at 80% -10%,rgba(109,92,255,.18),transparent 60%),
+  radial-gradient(900px 500px at 0% 110%,rgba(0,212,255,.12),transparent 60%),
+  var(--bg);
+  color:var(--txt);min-height:100vh;padding:clamp(16px,4vw,32px) 14px 60px}
+.wrap{max-width:760px;margin:0 auto}
+header{text-align:center;margin-bottom:26px}
+.logo{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:1.25rem;
+  background:linear-gradient(90deg,var(--acc2),var(--acc));-webkit-background-clip:text;background-clip:text;color:transparent}
+header h1{font-size:clamp(1.45rem,5.5vw,2rem);font-weight:800;margin:10px 0 6px;letter-spacing:-.02em}
+header p{color:var(--mut);font-size:clamp(.82rem,3vw,.95rem)}
+.badges{display:flex;gap:6px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.badge{font-size:.68rem;padding:5px 11px;border-radius:99px;border:1px solid var(--line);
+  background:rgba(255,255,255,.03);color:var(--mut)}
+.badge b{color:var(--txt)}
+
+.card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--line);
+  border-radius:18px;padding:clamp(16px,4vw,24px);margin-bottom:20px;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+.inputbox{display:flex;gap:10px}
+.inputwrap{position:relative;flex:1;min-width:0;display:flex}
+.inputbox input{flex:1;min-width:0;width:100%;background:#0a0d15;border:1px solid var(--line);border-radius:12px;
+  padding:14px 42px 14px 16px;color:var(--txt);font-size:16px;outline:none;transition:border .2s}
+.inputbox input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(109,92,255,.15)}
+.clrurl{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:99px;
+  border:0;background:rgba(255,255,255,.08);color:var(--mut);font-size:.85rem;cursor:pointer;line-height:1;
+  display:none;padding:0}
+.clrurl:hover{background:var(--err);color:#fff}
+.inputwrap.has .clrurl{display:block}
+.btn{background:linear-gradient(135deg,var(--acc),#8f7bff);border:0;border-radius:12px;
+  padding:14px 20px;color:#fff;font-weight:700;font-size:.95rem;cursor:pointer;
+  transition:transform .15s,box-shadow .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(109,92,255,.35)}
+.btn:disabled{opacity:.55;cursor:wait;transform:none}
+
+/* progress jobs */
+#jobs{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.job{background:#0a0d15;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.82rem}
+.job .jtop{display:flex;justify-content:space-between;gap:10px;margin-bottom:8px}
+.job .jname{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.job .jstage{color:var(--mut);font-size:.72rem;white-space:nowrap}
+.job.done .jstage{color:var(--ok)}
+.job.error .jstage{color:var(--err)}
+.bar{height:6px;background:#1a2030;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--acc2),var(--acc));
+  border-radius:99px;transition:width .4s}
+.job.done .bar i{background:var(--ok)}
+
+h2.sec{font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;color:var(--mut);margin:26px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+@media(max-width:400px){.grid{grid-template-columns:repeat(2,1fr)}}
+.fitem{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  transition:border .2s,transform .15s;position:relative}
+.fitem:hover{border-color:var(--acc);transform:translateY(-2px)}
+.tagwa{position:absolute;top:8px;right:8px;font-size:.6rem;font-weight:700;padding:3px 8px;border-radius:99px;
+  background:rgba(61,220,151,.15);color:var(--ok);border:1px solid rgba(61,220,151,.4)}
+.fplay{display:block;aspect-ratio:3/4;background:#0a0d15 center/cover no-repeat;position:relative;text-decoration:none}
+.fplay.nothumb::after{content:'🎬';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.8rem}
+.fplay::before{content:'▶';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;color:rgba(255,255,255,.9);background:rgba(0,0,0,.3);opacity:0;transition:opacity .2s}
+.fplay:hover::before{opacity:1}
+.fmeta{padding:10px 11px}
+.fname{color:var(--txt);font-weight:600;font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fsize{color:var(--mut);margin-top:3px;font-size:.7rem}
+.frow{display:flex;gap:7px;margin-top:9px}
+.frow a{flex:1;text-align:center;font-size:.68rem;padding:7px 0;border-radius:8px;text-decoration:none;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--mut);cursor:pointer}
+.frow a:hover{color:var(--txt);border-color:var(--acc)}
+.frow a.hot{color:var(--ok);border-color:rgba(61,220,151,.4)}
+.empty{color:var(--mut);font-size:.85rem;padding:6px 2px}
+.btn2x{background:rgba(255,107,129,.08);border:1px solid rgba(255,107,129,.3);color:var(--err);
+  border-radius:10px;padding:8px 14px;font-size:.72rem;font-weight:600;cursor:pointer;font-family:inherit}
+.btn2x:hover{background:rgba(255,107,129,.18)}
+.xdel{position:absolute;top:8px;left:8px;width:26px;height:26px;border-radius:99px;border:0;
+  background:rgba(0,0,0,.65);color:#fff;font-size:.85rem;cursor:pointer;line-height:1;z-index:2}
+.xdel:hover{background:var(--err)}
+.jx{margin-left:auto;flex:0 0 auto;width:24px;height:24px;border-radius:99px;border:0;
+  background:rgba(255,107,129,.14);color:var(--err);font-size:.8rem;cursor:pointer;line-height:1;padding:0}
+.jx:hover{background:var(--err);color:#fff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="logo">⬇ GrabVideo</span>
+    <h1>Download → HD → Encode.<br>Satu klik.</h1>
+    <p>TikTok tanpa watermark · Instagram · YouTube</p>
+    <div class="badges">
+      <span class="badge"><b>HD</b> otomatis</span>
+      <span class="badge"><b>No-WM</b> TikTok</span>
+      <span class="badge"><b>WA</b> HD 1080p</span>
+    </div>
+  </header>
+
+  <div class="card">
+    <div class="inputbox">
+      <div class="inputwrap" id="iwrap">
+        <input id="url" placeholder="Tempel URL video…" autocomplete="off" inputmode="url">
+        <button class="clrurl" id="clrurl" title="Hapus link" onclick="clearUrl()">✕</button>
+      </div>
+      <button class="btn" id="btn" onclick="go()">Download</button>
+    </div>
+    <div id="jobs"></div>
+  </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h2 class="sec" style="margin:0">Hasil</h2>
+      <button class="btn2x" onclick="clearAll()">Hapus semua</button>
+    </div>
+    <div class="grid" id="files" style="margin-top:12px"></div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const fmt=s=>s>1048576?(s/1048576).toFixed(1)+' MB':(s/1024).toFixed(0)+' KB';
+
+async function go(){
+  const u=$('url').value.trim();if(!u)return;
+  const b=$('btn');b.disabled=true;
+  try{await(await fetch('/api/download',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:u})})).json()}
+  catch(e){}
+  b.disabled=false;$('url').value='';syncClr();poll();
+}
+// ✕ di kolom URL: kosongkan link sekali klik
+function syncClr(){
+  const has=!!$('url').value.trim();
+  $('iwrap').classList.toggle('has',has);
+}
+function clearUrl(){
+  $('url').value='';syncClr();$('url').focus();
+}
+
+let lastFilesSig='';
+let filesSeq=0;
+
+async function poll(){
+  let js=[];try{js=await(await fetch('/api/jobs')).json()}catch(e){}
+  // buang job lama yang sudah selesai/gagal — jangan numpuk jadi "riwayat"
+  const aktif=js.filter(j=>j.stage==='downloading'||j.stage==='encoding');
+  const selesai=js.filter(j=>j.stage==='done'||j.stage==='error').slice(-1);
+  const box=$('jobs');
+  const html=[...aktif,...selesai].map(j=>{
+    const st=j.stage==='done'?'✅ '+j.msg:j.stage==='error'?'❌ '+j.msg:j.msg;
+    const pct=j.stage==='done'?100:j.pct||0;
+    const live=j.stage==='downloading'||j.stage==='encoding';
+    return `<div class="job ${j.stage}"><div class="jtop">
+      <span class="jname">${j.name||'…'}</span><span class="jstage">${st}</span>
+      <button class="jx" title="Batalkan &amp; hapus" onclick="killJob('${j.id}')">✕</button></div>
+      <div class="bar"><i style="width:${pct}%"></i></div></div>`;
+  }).join('');
+  if(box.innerHTML!==html)box.innerHTML=html;   // hindari re-render tiap 2s
+  files();
+}
+
+async function files(){
+  const seq=++filesSeq;
+  let fs=[];
+  try{fs=await(await fetch('/api/files')).json()}catch(e){}
+  if(seq!==filesSeq)return;                    // respons basi (mis. setelah hapus) → buang
+  // kalau daftar file tidak berubah, jangan render ulang (biar thumbnail tidak kedip)
+  const sig=fs.map(f=>f.name+f.size).join('|');
+  if(sig===lastFilesSig)return;
+  lastFilesSig=sig;
+  $('files').innerHTML=fs.map(f=>{
+    const isWa=f.name.endsWith('_wa.mp4');
+    // apakah file ini punya pasangan versi WA?
+    const base=f.name.replace(/\.mp4$/,'');
+    const hasWa=fs.some(x=>x.name===base+'_wa.mp4');
+    // file asli yang sudah pas (tidak di-encode ulang) → bisa langsung upload
+    const siapAsli=!isWa&&!hasWa;
+    const esc=f.name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/'/g,'&#39;');
+    const tag=isWa?'<span class="tagwa">WA HD</span>'
+      :siapAsli?'<span class="tagwa" style="background:rgba(61,220,151,.15);color:var(--ok);border-color:rgba(61,220,151,.4)">HD SIAP</span>'
+      :'<span class="tagwa" style="background:rgba(0,212,255,.12);color:var(--acc2);border-color:rgba(0,212,255,.35)">ASLI</span>';
+    return `<div class="fitem">
+    <button class="xdel" title="Hapus" onclick="delFile('${f.name.replace(/'/g,"\\'")}')">✕</button>
+    ${tag}
+    <a class="fplay nothumb" data-n="${esc}" href="/api/file/${encodeURIComponent(f.name)}" target="_blank"></a>
+    <div class="fmeta"><div class="fname" title="${esc}">${esc.replace(/_wa\.mp4$/,'').replace(/\.mp4$/,'')}</div>
+    <div class="fsize">${fmt(f.size)}${isWa||siapAsli?' · siap upload':''}</div>
+    <div class="frow"><a class="${isWa||siapAsli?'hot':''}" href="/api/file/${encodeURIComponent(f.name)}?dl=1" download>${isWa?'Simpan (WA)':siapAsli?'Simpan ke HP':'Simpan (Asli)'}</a></div>
+    </div></div>`;
+  }).join('')||'<p class="empty">Belum ada file. Download dulu di atas.</p>';
+  // thumbnail — request selalu cache-busted oleh server ETag versi
+  document.querySelectorAll('.fplay').forEach(el=>{
+    const img=new Image();
+    img.onload=()=>{el.style.backgroundImage=`url(/api/thumb/${encodeURIComponent(el.dataset.n)}?t=${Date.now()})`;el.classList.remove('nothumb')};
+    img.onerror=()=>{setTimeout(()=>{img.src='/api/thumb/'+encodeURIComponent(el.dataset.n)+'?t='+Date.now()},1500)};
+    img.src='/api/thumb/'+encodeURIComponent(el.dataset.n)+'?t='+Date.now();
+  });
+}
+
+async function delFile(n){
+  if(!confirm('Hapus '+n+' (beserta versi WA-nya)?'))return;
+  lastFilesSig='';                             // paksa refresh setelah hapus
+  await fetch('/api/file/'+encodeURIComponent(n),{method:'DELETE'});
+  files();poll();
+}
+// ✕ pada kartu link/job: batalkan proses yang jalan + buang kartunya + hapus filenya
+async function killJob(id){
+  if(!confirm('Batalkan dan hapus hasil download ini?'))return;
+  lastFilesSig='';                             // paksa refresh setelah hapus
+  await fetch('/api/job/'+encodeURIComponent(id),{method:'DELETE'});
+  files();poll();
+}
+async function clearAll(){
+  if(!confirm('Hapus SEMUA file hasil download?'))return;
+  lastFilesSig='';                             // paksa refresh setelah hapus
+  await fetch('/api/clear',{method:'POST'});
+  files();poll();
+}
+files();
+setInterval(poll,2000);
+$('url').addEventListener('keydown',e=>{if(e.key==='Enter')go()});
+$('url').addEventListener('input',syncClr);
+syncClr();
+</script>
+</body>
+</html>
