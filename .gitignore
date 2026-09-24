@@ -3,3 +3,4 @@ node_modules/
 cookies.txt
 .env
 .DS_Store
+*.bak
